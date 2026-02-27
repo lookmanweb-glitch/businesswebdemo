@@ -62,3 +62,91 @@ body { font-family: 'Inter', sans-serif; }
     from { transform: translateX(1rem); }
     to { transform: translateX(0); }
 }
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.animated-page-bg {
+  background: radial-gradient(circle at 10% 20%, rgba(219, 234, 254, 0.45), transparent 35%),
+              radial-gradient(circle at 85% 5%, rgba(187, 247, 208, 0.35), transparent 30%),
+              linear-gradient(120deg, #ffffff, #f8fbff, #f5faff);
+  background-size: 220% 220%;
+  animation: gradientShift 18s ease infinite;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(40px) scale(0.98);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: transform, opacity;
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-page-bg,
+  .animate-in,
+  .animate-scan-line,
+  .animate-flow-lines,
+  .animate-vertical-marquee,
+  .animate-vertical-marquee-slow {
+    animation: none !important;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-14px) scale(1.05); }
+}
+
+.estimate-blob {
+  animation: floatBlob 8s ease-in-out infinite;
+}
+
+.estimate-blob-delayed {
+  animation: floatBlob 10s ease-in-out infinite reverse;
+}
+
+.estimate-pill {
+  display: inline-flex;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.28);
+  background: rgba(255,255,255,0.12);
+  color: #e2e8f0;
+  padding: 0.2rem 0.6rem;
+}
+
+.estimate-primary-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.estimate-primary-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 25%, rgba(255,255,255,0.4) 50%, transparent 75%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+
+.estimate-primary-btn:hover::after {
+  transform: translateX(120%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .estimate-blob,
+  .estimate-blob-delayed {
+    animation: none !important;
+  }
+}
