@@ -1,15 +1,12 @@
-import React from 'react';
-import { 
-  Globe, Zap, ShieldCheck, Coins, Laptop2, 
-  ArrowUpRight, ArrowLeft, ArrowRight
+import React, { useEffect } from 'react';
+import {
+  Globe, Zap, ShieldCheck, Coins, Laptop2,
+  ArrowUpRight
 } from 'lucide-react';
 
 import { Hero } from './components/Hero';
 import { HowItWorks } from './components/HowItWorks';
 import { Pricing } from './components/Pricing';
-import { Header } from './components/Header'; // Although Hero includes it, for completeness
-
-// Re-using local components defined in the same file or imported
 import { CostEstimateForm } from './components/CostEstimateForm';
 import { ClientPortalSection } from './components/ClientPortal';
 import { ServicesSection } from './components/Services';
@@ -26,12 +23,30 @@ const FeatureItem: React.FC<{ icon: React.ReactNode, title: string, desc: string
 );
 
 const App: React.FC = () => {
+  useEffect(() => {
+    const revealItems = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    revealItems.forEach((item) => observer.observe(item));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <main className="min-h-screen selection:bg-blue-100 selection:text-blue-900 scroll-smooth">
+    <main className="min-h-screen selection:bg-blue-100 selection:text-blue-900 scroll-smooth animated-page-bg">
       <Hero />
-      
-      {/* Category Grid Section */}
-      <div className="max-w-7xl mx-auto px-6 py-24">
+
+      <div className="max-w-7xl mx-auto px-6 py-24" data-reveal>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="group relative rounded-[2rem] overflow-hidden h-[500px] p-8 flex flex-col justify-between transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl cursor-pointer bg-gradient-to-br from-[#2563EB] to-[#1E3A8A]">
             <div className="absolute inset-0 bg-blue-600/20 mix-blend-overlay"></div>
@@ -59,12 +74,11 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <HowItWorks />
+      <div data-reveal><HowItWorks /></div>
       <CostEstimateForm />
-      <ClientPortalSection />
+      <div data-reveal><ClientPortalSection /></div>
 
-      {/* Why Setup in UAE Section */}
-      <section className="overflow-hidden bg-neutral-50 py-24">
+      <section className="overflow-hidden bg-neutral-50 py-24" data-reveal>
         <div className="max-w-7xl mx-auto px-6">
           <div className="md:p-12 bg-gradient-to-br from-[#0567c2] to-[#1c0165] rounded-[2.5rem] p-16 relative shadow-2xl overflow-hidden">
             <div className="grid lg:grid-cols-12 gap-12 items-center relative z-10">
@@ -92,12 +106,11 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      <Pricing />
-      <ServicesSection />
-      <AgenciesMarquee />
+      <div data-reveal><Pricing /></div>
+      <div data-reveal><ServicesSection /></div>
+      <div data-reveal><AgenciesMarquee /></div>
 
-      {/* Ready to Launch Section */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
+      <section className="max-w-7xl mx-auto px-6 py-24" data-reveal>
         <div className="bg-[#F0F6FF] rounded-[2.5rem] p-8 lg:p-20 relative overflow-hidden bg-[url(https://images.unsplash.com/photo-1619252584172-a83a949b6efd?w=2560&q=80)] bg-cover group">
           <div className="absolute inset-0 bg-blue-900/40 group-hover:bg-blue-900/30 transition-colors duration-500"></div>
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
@@ -117,7 +130,7 @@ const App: React.FC = () => {
         </div>
       </section>
 
-      <ContactSection />
+      <div data-reveal><ContactSection /></div>
       <Footer />
     </main>
   );
